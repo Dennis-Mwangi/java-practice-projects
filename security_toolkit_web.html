@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Security Toolkit (Web)</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; background:#f5f7fa; color:#222; padding:20px; }
+    .card { background:#fff; border-radius:8px; padding:18px; box-shadow:0 6px 18px rgba(0,0,0,0.06); margin-bottom:16px; }
+    h2 { color:#034078; margin-top:0; }
+    label { display:block; margin:8px 0 4px; font-weight:600; }
+    input[type="text"], input[type="number"], textarea, select {
+      width:100%; padding:10px; border:1px solid #ccd; border-radius:6px;
+    }
+    button { padding:10px 14px; border:none; border-radius:6px; background:#034078; color:#fff; cursor:pointer; }
+    button.secondary { background:#6c757d; }
+    .row { display:flex; gap:12px; align-items:center; }
+    .meter { height:10px; background:#eee; border-radius:6px; overflow:hidden; margin-top:8px; }
+    .meter > i { display:block; height:100%; width:0; background:linear-gradient(90deg,#ff4d4f,#ffb020,#28a745); }
+    pre { background:#0f1724; color:#cfe8ff; padding:12px; border-radius:6px; overflow:auto; }
+    small { color:#555; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Password Strength Analyzer</h2>
+    <label for="pwd">Enter password</label>
+    <input id="pwd" type="text" placeholder="Type password to analyze" />
+    <div class="meter"><i id="meterBar"></i></div>
+    <p id="pwdDetails"></p>
+    <button id="analyzeBtn">Analyze</button>
+  </div>
+
+  <div class="card">
+    <h2>Secure Password Generator</h2>
+    <label for="len">Length</label>
+    <input id="len" type="number" min="4" value="12" />
+    <div style="margin-top:8px;">
+      <label><input type="checkbox" id="useUpper" checked/> Uppercase</label>
+      <label><input type="checkbox" id="useLower" checked/> Lowercase</label>
+      <label><input type="checkbox" id="useDigits" checked/> Digits</label>
+      <label><input type="checkbox" id="useSymbols" checked/> Symbols</label>
+    </div>
+    <div style="margin-top:10px;" class="row">
+      <button id="genBtn">Generate</button>
+      <button class="secondary" id="copyGen">Copy</button>
+      <input id="generated" type="text" readonly placeholder="Generated password will appear here" />
+    </div>
+    <small>Tip: copy the generated password into a password manager.</small>
+  </div>
+
+  <div class="card">
+    <h2>Safe Router-Password Checker (Local)</h2>
+    <p>This compares the password you enter against a local common-password list. It does <strong>not</strong> connect to any device.</p>
+    <label for="adminPwd">Enter your router/admin password (local only)</label>
+    <input id="adminPwd" type="text" placeholder="Enter your own admin password to check" />
+    <div style="margin-top:10px;" class="row">
+      <button id="checkBtn">Check Password</button>
+      <button id="clearCheck" class="secondary">Clear</button>
+    </div>
+    <p id="checkResult"></p>
+  </div>
+
+  <div class="card">
+    <h2>Notes & Safety</h2>
+    <ul>
+      <li>This toolkit is <strong>educational</strong> — it does not attack or test remote systems.</li>
+      <li>To test a real router's security, always have explicit permission and use vendor tools or professional services.</li>
+      <li>Use a password manager to store strong generated passwords.</li>
+    </ul>
+  </div>
+
+<script>
+const COMMON = ["123456","password","123456789","12345678","12345","111111",
+  "1234567","sunshine","qwerty","iloveyou","admin","welcome","password1","1234","000000"];
+
+function scorePassword(p) {
+  if (!p) return {score:0,details:[]};
+  let score = 0;
+  const details = [];
+  if (p.length >= 8) { score += 2; details.push("Length >= 8"); }
+  if (p.length >= 12) { score += 2; details.push("Length >= 12"); }
+  if (/[a-z]/.test(p)) { score++; details.push("Has lowercase"); }
+  if (/[A-Z]/.test(p)) { score++; details.push("Has uppercase"); }
+  if (/\d/.test(p)) { score++; details.push("Has digit"); }
+  if (/[^A-Za-z0-9]/.test(p)) { score++; details.push("Has symbol"); }
+  if (!COMMON.includes(p.toLowerCase())) { score++; details.push("Not in small common list"); }
+  return {score, details};
+}
+
+document.getElementById('analyzeBtn').addEventListener('click', () => {
+  const p = document.getElementById('pwd').value;
+  const r = scorePassword(p);
+  const meter = Math.min(r.score,8)/8*100;
+  document.getElementById('meterBar').style.width = meter + '%';
+  document.getElementById('pwdDetails').innerHTML =
+    `<strong>Score:</strong> ${r.score}/8 <br/><strong>Checks:</strong> ${r.details.join(', ') || 'None'}`;
+});
+
+function generate(len, opts) {
+  const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const lower = "abcdefghijklmnopqrstuvwxyz";
+  const digits = "0123456789";
+  const symbols = "!@#$%^&*()-_=+[]{};:,.<>?/";
+  let pool = "";
+  if (opts.upper) pool += upper;
+  if (opts.lower) pool += lower;
+  if (opts.digits) pool += digits;
+  if (opts.symbols) pool += symbols;
+  if (!pool) pool = lower + digits;
+  // ensure at least one of each selected group
+  let out = [];
+  if (opts.upper) out.push(upper[Math.floor(Math.random()*upper.length)]);
+  if (opts.lower) out.push(lower[Math.floor(Math.random()*lower.length)]);
+  if (opts.digits) out.push(digits[Math.floor(Math.random()*digits.length)]);
+  if (opts.symbols) out.push(symbols[Math.floor(Math.random()*symbols.length)]);
+  for (let i=out.length;i<len;i++) out.push(pool[Math.floor(Math.random()*pool.length)]);
+  out.sort(()=>Math.random()-0.5);
+  return out.join('');
+}
+
+document.getElementById('genBtn').addEventListener('click', () => {
+  const len = parseInt(document.getElementById('len').value) || 12;
+  const opts = {
+    upper: document.getElementById('useUpper').checked,
+    lower: document.getElementById('useLower').checked,
+    digits: document.getElementById('useDigits').checked,
+    symbols: document.getElementById('useSymbols').checked
+  };
+  const pwd = generate(Math.max(4,len), opts);
+  document.getElementById('generated').value = pwd;
+});
+
+document.getElementById('copyGen').addEventListener('click', async () => {
+  const v = document.getElementById('generated').value;
+  if (!v) return alert('Nothing to copy');
+  try { await navigator.clipboard.writeText(v); alert('Copied to clipboard'); }
+  catch(e){ alert('Copy not available in this browser'); }
+});
+
+document.getElementById('checkBtn').addEventListener('click', () => {
+  const p = document.getElementById('adminPwd').value;
+  if (!p) { document.getElementById('checkResult').innerText = "Please enter a password."; return; }
+  if (COMMON.includes(p.toLowerCase())) {
+    document.getElementById('checkResult').innerHTML = "<strong style='color:#b02a37'>Weak — found in common list</strong>";
+  } else {
+    const r = scorePassword(p);
+    document.getElementById('checkResult').innerHTML = `<strong style='color:#0b6'>Not in common list.</strong> Score ${r.score}/8. ${r.details.join(', ')}`;
+  }
+});
+
+document.getElementById('clearCheck').addEventListener('click', () => {
+  document.getElementById('adminPwd').value = '';
+  document.getElementById('checkResult').innerText = '';
+});
+</script>
+</body>
+</html>
