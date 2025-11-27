@@ -1,0 +1,53 @@
+Java Projects Collection
+
+A collection of Java programs and small projects created to demonstrate my learning journey in Java programming.  
+These projects cover **fundamental concepts** such as classes, objects, loops, conditionals, arrays, GUI development, and basic algorithms.
+
+
+
+ Project Structure
+
+ Basic Java Programs
+Beginner-level programs demonstrating Java syntax, variables, loops, and conditional statements:
+
+- Area.java – Calculates area of a shape  
+- For loop.java, Whileloop.java, Forlooparray.java – Looping examples  
+- If.java – Conditional statements -if statements 
+- Maxnumber.java – Finds maximum number  
+- Primenumbers.java– Prime number logic  
+-Marks.java – Student marks evaluation  
+- Dayexample.java – Day-of-week example using conditionals  
+
+---
+
+ Interactive & Logical Programs
+Logic-based challenges and small applications:
+
+-Guessnumber.java – Number guessing game  
+- **Repeatquiz.java**, **Substractionquiz.java** – Quiz programs using loops  
+- **Multiplicationtable.java** – Generates multiplication tables  
+
+---
+
+Object-Oriented Programming (OOP) Projects
+Demonstrates classes, objects, constructors, and methods:
+
+- Car.java – Car class example  
+- Loan.java – Loan calculation logic -Simple Loan calculator 
+- Student.java – Student details and processing  
+-Contactbook.java,  – Simple contact book application  
+
+
+
+Graphical User Interface (GUI) Projects
+Uses **Java Swing** to create simple interfaces:
+
+- BruteForceSimulatorGUI.java – Brute-force simulation GUI  
+- LottoGUI.java** – Lottery number generator GUI  
+
+---
+
+ HTML / Web-Based Projects
+- calculator.html – Basic calculator using HTML & JavaScript  
+ 
+
