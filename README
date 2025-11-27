@@ -1,7 +1,7 @@
 Java Projects Collection
 
 A collection of Java programs and small projects created to demonstrate my learning journey in Java programming.  
-These projects cover **fundamental concepts** such as classes, objects, loops, conditionals, arrays, GUI development, and basic algorithms.
+These projects cover fundamental concepts such as classes, objects, loops, conditionals, arrays, GUI development, and basic algorithms.
 
 
 
@@ -24,8 +24,8 @@ Beginner-level programs demonstrating Java syntax, variables, loops, and conditi
 Logic-based challenges and small applications:
 
 -Guessnumber.java – Number guessing game  
-- **Repeatquiz.java**, **Substractionquiz.java** – Quiz programs using loops  
-- **Multiplicationtable.java** – Generates multiplication tables  
+- Repeatquiz.java, **Substractionquiz.java – Quiz programs using loops  
+- Multiplicationtable.java – Generates multiplication tables  
 
 ---
 
@@ -40,14 +40,15 @@ Demonstrates classes, objects, constructors, and methods:
 
 
 Graphical User Interface (GUI) Projects
-Uses **Java Swing** to create simple interfaces:
+UsesJava Swing to create simple interfaces:
 
 - BruteForceSimulatorGUI.java – Brute-force simulation GUI  
-- LottoGUI.java** – Lottery number generator GUI  
+- LottoGUI.java – Lottery number generator GUI  
 
 ---
 
  HTML / Web-Based Projects
 - calculator.html – Basic calculator using HTML & JavaScript  
  
+
 
